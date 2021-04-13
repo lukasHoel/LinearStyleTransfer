@@ -1,0 +1,5 @@
+Artistic
+videos/*.avi
+videos/*.txt
+models
+**/__pycache__
