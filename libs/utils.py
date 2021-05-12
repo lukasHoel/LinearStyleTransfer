@@ -60,10 +60,10 @@ def makeVideo(content,style,props,outf):
     ori_video = cv2.VideoWriter(os.path.join(outf,'content.avi'),fourcc,10.0,(width,height))
     for j in range(len(content)):
         prop,cont = numpy2cv2(content[j],style,props[j],width,height)
-        cv2.imwrite(f'styled-{j}.png',prop)
+        cv2.imwrite(f'{outf}/styled-{j}.png',prop)
         cv2.imwrite('content.png',cont)
         # TODO: this is ugly, fix this
-        imgj = cv2.imread(f'styled-{j}.png')
+        imgj = cv2.imread(f'{outf}/styled-{j}.png')
         imgc = cv2.imread('content.png')
 
         video.write(imgj)

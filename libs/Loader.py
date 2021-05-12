@@ -14,9 +14,7 @@ class Dataset(data.Dataset):
         super(Dataset,self).__init__()
         self.dataPath = dataPath
         self.image_list = [x for x in os.listdir(dataPath) if is_image_file(x)]
-        self.image_list = sorted(self.image_list, key=lambda x: int(x.split(".")[0])
-        if(video):
-            self.image_list = sorted(self.image_list)
+        self.image_list = sorted(self.image_list, key=lambda x: int(x.split(".")[0]))
         if not test:
             self.transform = transforms.Compose([
             		         transforms.Resize(fineSize),

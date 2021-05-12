@@ -58,6 +58,7 @@ opt = parser.parse_args()
 opt.content_layers = opt.content_layers.split(',')
 opt.style_layers = opt.style_layers.split(',')
 opt.cuda = torch.cuda.is_available()
+#opt.cuda = False
 if(opt.cuda):
     torch.cuda.set_device(opt.gpu_id)
 
@@ -110,8 +111,8 @@ criterion = LossCriterion(opt.style_layers,
 optimizer = optim.Adam(matrix.parameters(), opt.lr)
 
 ################# GLOBAL VARIABLE #################
-contentV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
-styleV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
+contentV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize).float()
+styleV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize).float()
 
 ################# GPU  #################
 if(opt.cuda):
@@ -176,10 +177,11 @@ for iteration in range(1,opt.niter+1):
 
     adjust_learning_rate(optimizer,iteration)
 
-    if((iteration) % opt.log_interval == 0):
-        transfer = transfer.clamp(0,1)
-        concat = torch.cat((content,style,transfer.cpu()),dim=0)
-        vutils.save_image(concat,'%s/%d.png'%(opt.outf,iteration),normalize=True,scale_each=True,nrow=opt.batchSize)
+    with torch.no_grad():
+        if((iteration) % opt.log_interval == 0):
+            transfer = transfer.clamp(0,1)
+            concat = torch.cat((content,style,transfer.cpu()),dim=0)
+            vutils.save_image(concat,'%s/%d.png'%(opt.outf,iteration),normalize=True,scale_each=True,nrow=opt.batchSize)
 
-    if(iteration > 0 and (iteration) % opt.save_interval == 0):
-        torch.save(matrix.state_dict(), '%s/%s.pth' % (opt.outf,opt.layer))
+        if(iteration > 0 and (iteration) % opt.save_interval == 0):
+            torch.save(matrix.state_dict(), '%s/%s.pth' % (opt.outf,opt.layer))
