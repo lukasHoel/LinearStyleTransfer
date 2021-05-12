@@ -111,8 +111,8 @@ criterion = LossCriterion(opt.style_layers,
 optimizer = optim.Adam(matrix.parameters(), opt.lr)
 
 ################# GLOBAL VARIABLE #################
-contentV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize).float()
-styleV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize).float()
+contentV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
+styleV = torch.Tensor(opt.batchSize,3,opt.fineSize,opt.fineSize)
 
 ################# GPU  #################
 if(opt.cuda):
